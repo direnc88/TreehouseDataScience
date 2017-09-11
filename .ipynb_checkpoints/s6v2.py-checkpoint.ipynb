@@ -1,0 +1,101 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "import matplotlib.pyplot as plt\n",
+    "from matplotlib.backends.backend_pdf import PdfPages\n",
+    "from s6v1 import *\n",
+    "\n",
+    "def plot_minimal_graph(tally, columns, *args):\n",
+    "    plt.style.use('bmh')\n",
+    "    fig = plt.figure(dpi=200)\n",
+    "    colors=plt.rcParams['axes.color_cycle']\n",
+    "    \n",
+    "    # --- White background to use less printer ink --- #\n",
+    "    ax = plt.subplot(111, axisbg='white')\n",
+    "    \n",
+    "    #plot bars and create text labels for the table. \n",
+    "    for priceBucket in tally:\n",
+    "        ax.bar(priceBucket, tally[priceBucket], color=colors[priceBucket%len(tally)])\n",
+    "        ax.annotate(r\"%d\" % (tally[priceBucket]), (priceBucket+0.2, tally[priceBucket]), va=\"bottom\", ha=\"center\")\n",
+    "        \n",
+    "    # --- Include a legend --- #\n",
+    "    ax.legend(columns)\n",
+    "    \n",
+    "    # --- Remove distracting lines on top, left, and right --- #\n",
+    "    ax.spines['top'].set_visible(False)\n",
+    "    ax.spines['right'].set_visible(False)\n",
+    "    ax.spines['left'].set_visible(False)\n",
+    "    \n",
+    "    # --- Rmove distracting tick marks --- #\n",
+    "    ax.yaxis.set_ticks_position('none')\n",
+    "    ax.xaxis.set_ticks_position('none')\n",
+    "    \n",
+    "    # --- Add chart title and axes labels --- #\n",
+    "    plt.xlabel('Tie Price', fontsize = 13)\n",
+    "    plt.ylabel('Number of Ties', fontsize = 13)\n",
+    "    plt.title('Chart #1')\n",
+    "    \n",
+    "    # --- Add labels to bars along x axes --- #\n",
+    "    x = range(1, len(tally)+1)\n",
+    "    plt.xticks(x, columns, rotation='horizontal', ha='left')\n",
+    "    \n",
+    "    return fig\n",
+    "\n",
+    "def plot_graph_with_table(cell_text, row_text, columns):\n",
+    "    plt.style.use('ggplot')\n",
+    "    fig = plt.figure()\n",
+    "    \n",
+    "    # --- Include table --- #\n",
+    "    ax2 = fig.add_subplot(111)\n",
+    "    ax2.axis('off')\n",
+    "    \n",
+    "    the_table = ax2.table(cellText=cell_text, rowLabels=row_text, colLabels = columns, loc='center right')\n",
+    "    \n",
+    "pp = pdfPages('my_report.pdf')\n",
+    "\n",
+    "plot1 = plot_minimal_graph(price_groups, columns)\n",
+    "pp.savefig(plot1, bbox_inches = 'tight')\n",
+    "\n",
+    "table_text = build_table_text(brand_and_price_data, brands)\n",
+    "plot2 = plot_graph_with_table(table_text[0], table_text[1], columns)\n",
+    "pp.savefig(plot2, bbox_inches = 'tight')\n",
+    "\n",
+    "pp.close()\n",
+    "\n",
+    "    \n",
+    "    \n",
+    "    \n",
+    "        \n",
+    "    "
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.6.1"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
